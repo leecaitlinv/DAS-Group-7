@@ -2,6 +2,8 @@
 title: "Group 7 Data Analysis"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Introduction
@@ -40,8 +42,7 @@ The main questions of interest are:
 
 -   Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
 
--    Are there any differences in obesity by age, gender, socio-economic status or
-    lifestyle factors?
+-   Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
 
 ## Exploratory data Analysis
 
@@ -49,7 +50,8 @@ The main questions of interest are:
 #| echo: false
 #| warning: false
 #| message: false
-data<-read.csv("DAProject7.csv")
+data<-read.csv("DAProject7.csv", stringsAsFactors = T)
+str(data)
 library(ggplot2)
 library(tidyverse)
 library(tidymodels)
@@ -60,6 +62,8 @@ library(moderndive)
 library(sjPlot)
 library(performance)
 library(kableExtra)
+
+
 ```
 
 ```{r}
