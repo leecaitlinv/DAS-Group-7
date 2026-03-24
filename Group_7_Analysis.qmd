@@ -227,7 +227,7 @@ Question2 <- glm(
 summary(Question2)
 ```
 
-@tbl-summary is a table which proved the odds ratio of obesity prevalence
+@tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity.Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
 
 ```{r}
 #| echo: false
@@ -247,8 +247,6 @@ sjPlot::tab_model(
 ```
 
 For male,full-time education employment,paid ememployment, self-employedor on gov't training,employment that works home,vegetable and fruit consumer, they usually have lower odds ratios ,in a high obesity oddswhich means they are less likely to be overweight.The others are higher that more likely to be obese.
-
-Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
 
 Obviously, 'Age Group' is statistically significant predictor. In opposite,there is no significant difference between males and females. Furthermore,being a full-time education and consuming vegetables is associated with a lower risk of obesity. The other employment and fruit consumption are not clearly indicates obesity.
 
