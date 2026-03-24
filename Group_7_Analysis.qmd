@@ -177,6 +177,21 @@ The exploratory analysis suggests that obesity prevalence varies across differen
 #| echo: false
 #| warning: false
 #| message: false
+
+#q1 model
+#response modeled with respect to year
+model_year <- glm(Obese~Year, data = data, family = binomial)
+summary(model_year)
+
+tab_model(model_year)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+#q2 models
 #testing with binomial model because of binary response with year for question 1
 model_year <- glm(Obese~Year, data = data, family = binomial)
 summary(model_year)
