@@ -227,7 +227,7 @@ Question2 <- glm(
 summary(Question2)
 ```
 
-@tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity.Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
+@tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity. Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
 
 ```{r}
 #| echo: false
