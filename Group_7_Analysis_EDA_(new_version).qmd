@@ -3,9 +3,9 @@ title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in
 author: "Caitlin Lee, Yijia Yuan, Qianrui Tang, Yixuan Liu"
 format:
   pdf:
-    documentclass: report
+    documentclass: article
     fontsize: 11pt
-    titlepage: true
+    titlepage: false
 geometry: margin=0.9in
 editor: visual
 ---
