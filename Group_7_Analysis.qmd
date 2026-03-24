@@ -168,3 +168,107 @@ data %>%
 Obesity prevalence was also explored across dietary factors, including fruit and vegetable intake. The distributions appear similar, although slight differences may be observed between individuals meeting and not meeting the recommended intake.
 
 The exploratory analysis suggests that obesity prevalence varies across different groups. In particular, differences are observed across age groups, and socio-economic and vegetable intake factors. These patterns indicate that obesity is likely influenced by multiple variables. A formal statistical analysis will be conducted to further investigate these relationships and determine their significance.
+
+## Formal Analysis
+
+To address the two research questions, a series of logistic regression models were fitted, since the response variable Obese is binary.
+
+First, a simple logistic regression model including only Year was fitted. This model was used to address Question 1 by assessing whether obesity prevalence changed across the survey years.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+#testing with binomial model because of binary response with year for question 1
+model_year <- glm(Obese~Year, data = data, family = binomial)
+summary(model_year)
+
+```
+
+Next, to determine which model yielded better data results, we compared two models. Model 1 fitted an additive model that included year, gender, age group, employment status, vegetable intake, and fruit intake. This model included all factors, allowing us to test two research questions simultaneously.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+#testing the binomial model with just the additive terms.
+modelred <- glm(Obese~ Year + Sex + AgeGroup + Employment + Veg + Fruit, data = data, family = binomial)
+summary(modelred)
+
+#did backward elimination using step funciton to get the final model as:
+step(modelred, direction = "backward")
+modelred1 <- glm (Obese ~ Sex + AgeGroup + Employment + Veg, data = data, family = binomial)
+```
+
+We used the `step()` function to perform backward elimination on the additive model. This resulted in a simplified model that included gender, age group, employment status, and vegetable intake, showing that year and fruit intake no longer had a significant effect after incorporating other variables were included.
+
+By adding selected interaction terms (year:gender, year:age group, and gender:age group), we fitted a new interaction logistic regression model to explore whether the influence of one explanatory variable depends on another. After stepwise regression analysis, the final interaction model retained the interaction terms for gender, age group, employment status, vegetable intake, and gender and age group.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#Testing model with a few chosen interaction terms 
+modelfull <-  glm(Obese ~ Year + Sex + AgeGroup + Employment + Veg + Fruit +
+            Year:Sex + Year:AgeGroup + Sex:AgeGroup,
+          data = data, family = binomial)
+summary(modelfull)
+
+#backward elimintation using step function again
+step(modelfull, direction = "backward")
+
+# got to the final model for this as:
+model_full1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
+                    data = data, family = binomial)
+
+#tested the both model (modelred1, modelfull1) to see which one is better
+anova(model_full1, modelred1, test = "Chisq")
+AIC(model_full1, modelred1)
+
+
+```
+
+The two candidate final models, Model1 and Model2, were compared using a likelihood ratio test and AIC. The interaction model Model2 was preferred because it provides a better representation of the data by allowing the relationship between sex and obesity to vary across age groups. Although it is slightly more complex, it captures an important interaction structure that the additive model does not. The ROC curve for Model2 also lies above the diagonal reference line, indicating some discriminatory ability.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(ggplot2)
+library(sjPlot)
+library(broom)
+library(performance)
+library(yardstick)
+library(pROC)
+
+#model fit of final model with interaction
+pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| eval: false
+
+#Model fit with final additive model 
+pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred1, Actual = data$Obese)
+
+roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
+plot(roc_obj1)
+auc(roc_obj1)
+```
+
+The final model therefore suggests that obesity prevalence is associated with age group, employment status, and vegetable intake, and that the effect of sex differs across age groups. In contrast, there is little evidence that obesity prevalence changed substantially across survey years once the other factors were taken into account. Similarly, fruit intake does not appear to have a strong independent association with obesity in the final model.
