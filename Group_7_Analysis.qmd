@@ -173,6 +173,7 @@ Obesity prevalence was also explored across dietary factors, including fruit and
 The exploratory analysis suggests that obesity prevalence varies across different groups. In particular, differences are observed across age groups, and socio-economic and vegetable intake factors. These patterns indicate that obesity is likely influenced by multiple variables. A formal statistical analysis will be conducted to further investigate these relationships and determine their significance.
 
 ## Formal Analysis
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -199,12 +200,12 @@ summary(modelfull)
 step(modelfull, direction = "backward")
 
 # got to the final model for this as:
-model_full1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
+modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
                     data = data, family = binomial)
 
 #tested the both model (modelred1, modelfull1) to see which one is better
-anova(model_full1, modelred1, test = "Chisq")
-AIC(model_full1, modelred1)
+anova(modelred1, modelfull1, test = "Chisq")
+AIC(modelfull1, modelred1)
 
 #model fit of full model
 pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
