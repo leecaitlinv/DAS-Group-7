@@ -62,7 +62,10 @@ library(moderndive)
 library(sjPlot)
 library(performance)
 library(kableExtra)
-
+library(ggplot2)
+library(broom)
+library(yardstick)
+library(pROC)
 
 ```
 
@@ -168,3 +171,65 @@ data %>%
 Obesity prevalence was also explored across dietary factors, including fruit and vegetable intake. The distributions appear similar, although slight differences may be observed between individuals meeting and not meeting the recommended intake.
 
 The exploratory analysis suggests that obesity prevalence varies across different groups. In particular, differences are observed across age groups, and socio-economic and vegetable intake factors. These patterns indicate that obesity is likely influenced by multiple variables. A formal statistical analysis will be conducted to further investigate these relationships and determine their significance.
+
+## Formal Analysis
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#testing with binomial model because of binary response with year for question 1
+model_year <- glm(Obese~Year, data = data, family = binomial)
+summary(model_year)
+
+#testing the binomial model with just the additive terms.
+modelred <- glm(Obese~ Year + Sex + AgeGroup + Employment + Veg + Fruit, data = data, family = binomial)
+summary(modelred)
+
+#did backward elimination using step funciton to get the final model as:
+step(modelred, direction = "backward")
+modelred1 <- glm (Obese ~ Sex + AgeGroup + Employment + Veg, data = data, family = binomial)
+
+#Testing model with a few chosen interaction terms 
+modelfull <-  glm(Obese ~ Year + Sex + AgeGroup + Employment + Veg + Fruit +
+            Year:Sex + Year:AgeGroup + Sex:AgeGroup,
+          data = data, family = binomial)
+summary(modelfull)
+
+#backward elimintation using step function again
+step(modelfull, direction = "backward")
+
+# got to the final model for this as:
+model_full1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
+                    data = data, family = binomial)
+
+#tested the both model (modelred1, modelfull1) to see which one is better
+anova(model_full1, modelred1, test = "Chisq")
+AIC(model_full1, modelred1)
+
+#model fit of full model
+pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| eval: false
+
+#Model fit with additive model 
+pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred1, Actual = data$Obese)
+
+roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
+plot(roc_obj1)
+auc(roc_obj1)
+
+#in terms of the AUC, the final model with interaction terms is better. And thus its also the reason why we choose the final model with the interaction terms
+```
