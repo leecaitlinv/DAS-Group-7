@@ -227,7 +227,7 @@ Question2 <- glm(
 summary(Question2)
 ```
 
-Organize the model results into an odds ratio table.
+@tbl-summary is a table which proved the odds ratio of obesity prevalence
 
 ```{r}
 #| echo: false
@@ -252,6 +252,6 @@ Extremely low p-value that \<0.001 represents that all age group, full-time educ
 
 Obviously, 'Age Group' is statistically significant predictor. In opposite,there is no significant difference between males and females. Furthermore,being a full-time education and consuming vegetables is associated with a lower risk of obesity. The other employment and fruit consumption are not clearly indicates obesity.
 
-**Analysis results**
+### Analysis result
 
 The logistic regression results indicate that age is the strongest predictor of obesity, with the risk increasing significantly across age groups. Lifestyle factors also play a role, as individuals who consume recommended amounts of vegetables are less likely to be obese. In contrast, sex and most employment categories are not significantly associated with obesity. That is all the related results we found by this project.
