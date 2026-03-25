@@ -289,19 +289,43 @@ Obviously, 'Age Group' is statistically significant predictor. In opposite,there
 The logistic regression results indicate that age is the strongest predictor of obesity, with the risk increasing significantly across age groups. Lifestyle factors also play a role, as individuals who consume recommended amounts of vegetables are less likely to be obese. In contrast, sex and most employment categories are not significantly associated with obesity. That is all the related results we found by this project.
 
 ```{r}
-#| eval: false
 #| echo: false
 #| warning: false
 #| message: false
-
+#| results: hide
 #Model fit with additive model 
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
 
 table(Predicted = pred1, Actual = data$Obese)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: fig-roc
+#| fig-cap: ROC of the logitsitc regression model
+#| fig-align: center
+#| fig-height: 3
 
 roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
 plot(roc_obj1)
-auc(roc_obj1)
-
-#in terms of the AUC, the final model with interaction terms is better. And thus its also the reason why we choose the final model with the interaction terms
 ```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: tbl-auc
+#| tbl-cap: "Area under the ROC curve of final model"
+
+auc_value <- auc(roc_obj1)
+auc_table <- data.frame(
+  Metric = "AUC",
+  Value = round(auc_value, 2)
+)
+kable(auc_table, align = "c")
+#in terms of the AUC, the additive model
+```
+Next, we evaluate the model to see how good it fits our data. We evaluated by using the ROC curves and find the AUC data
+
