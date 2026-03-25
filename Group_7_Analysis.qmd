@@ -247,6 +247,7 @@ $$
 The model when fitted produced the result as follows:
 
 ```{r}
+#| echo: false
 #| warning: false
 #| message: false
 tab_model(model_year)
@@ -255,6 +256,9 @@ tab_model(model_year)
 From the figure above, there was no evidence of obesity prevalence over time as the 95% CI range included 1. The model explained very little variation in obesity indicating that year alone is not a strong predictor of obesity. The p-value is also much bigger than the significant level indicating that year is not statistically significant for explaining obesity and therefore conclude that obesity prevalence does not differ by year.
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
 #q2 models
 
 #testing the binomial model with just the additive terms.
@@ -319,6 +323,9 @@ The logistic regression results indicate that age is the strongest predictor of 
 
 ```{r}
 #| eval: false
+#| echo: false
+#| warning: false
+#| message: false
 
 #Model fit with additive model 
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
