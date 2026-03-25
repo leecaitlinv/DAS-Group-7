@@ -214,7 +214,7 @@ To assess whether the obesity prevalence differ by year, a logistic regression m
 
 $$
 \log \left( \frac{p_i}{1 - p_i} \right)
-= \beta_0 + \beta_1 \cdot \text{Year}
+= \beta_0 + \beta_1 \cdot \text{Year}_i
 $$
 
 The model when fitted produced the result as follows:
