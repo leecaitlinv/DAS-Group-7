@@ -1,0 +1,177 @@
+---
+title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in Scotland: Evidence from the 2008–2012 Health Surveys"
+author: "Caitlin Lee, Yijia Yuan, Qianrui Tang, Yixuan Liu"
+format:
+  pdf:
+    documentclass: article
+    fontsize: 11pt
+    titlepage: false
+geometry: margin=0.9in
+editor: visual
+---
+
+## Introduction
+
+### Background
+
+Obesity is a growing public health concern worldwide and is associated with an increased risk of various chronic conditions, including cardiovascular diseases, diabetes, and certain cancers. Monitoring the prevalence of obesity within a population is important for identifying trends over time and informing public health policies.
+
+The Scottish Health Survey is designed to assess the health of individuals living in Scotland and to monitor changes in health-related behaviours and outcomes. The dataset used in this analysis contains information collected between 2008 and 2012, including demographic, socio-economic, and lifestyle factors alongside an indicator of obesity.
+
+The primary aim of this study is to examine whether the prevalence of obesity in Scotland has changed over the survey years. In addition, the analysis will explore whether obesity prevalence differs across age groups, gender, employment status, and lifestyle behaviours such as fruit and vegetable consumption.
+
+### Variables
+
+The dataset contains the following variables:
+
+-   **AgeGroup:** The age range of the individual, grouped in categories
+
+-   **Sex:** The gender of the individual (Male/Female)
+
+-   **Employment:** Employment status, used as an indicator of socio-economic status
+
+-   **Fruit:** Whether the individual meets the recommended daily fruit intake (Yes/No)
+
+-   **Veg:** Whether the individual meets the recommended daily vegetable intake (Yes/No)
+
+-   **Year:** The year in which the survey was conducted (2008-2012)
+
+-   **Obese:** Indicator variable showing whether the individual is classified as obese.
+
+In this analysis, Obese is treated as the response variable. The remaining variables (age group, sex, employment status, and dietary factors) are considered explanatory variables to investigate potential differences in obesity prevalence across different population subgroups.
+
+### Questions of interest
+
+The main questions of interest are:
+
+-   Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
+
+-   Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
+
+## Exploratory data Analysis
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+data<-read.csv("DAProject7.csv")
+library(ggplot2)
+library(tidyverse)
+library(tidymodels)
+library(gt)
+library(MASS)
+library(patchwork)
+library(moderndive)
+library(sjPlot)
+library(performance)
+library(kableExtra)
+data$Obese <- factor(data$Obese)
+data$AgeGroup <- factor(data$AgeGroup)
+data$Sex <- factor(data$Sex)
+data$Employment <- factor(data$Employment)
+data$Veg <- factor(data$Veg)
+data$Fruit <- factor(data$Fruit)
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(dplyr)
+library(scales)
+library(knitr)
+
+data %>%
+  count(Obese) %>%
+  mutate(
+    Proportion = round(n / sum(n), 3),
+    Percentage = percent(n / sum(n))
+  ) %>%
+  kable(
+    col.names = c("Obesity Status", "Count", "Proportion", "Percentage"),
+    align = "c"
+  )
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-height: 4
+#| fig-width: 4.5
+#| figure: center
+ggplot(data, aes(x = Obese)) +
+  geom_bar(fill = "skyblue") +
+  theme_minimal() +
+  labs(title = "Overall Obesity Prevalence",
+       x = "Obese", y = "Count")
+```
+
+As the table and the figure shows. The proportion of individuals classified as obese provides an initial indication of obesity prevalence in the sample.
+
+To explore how obesity prevalence varies across different demographic factors, the proportion of individuals classified as obese was examined by year, sex, age group, and employment status.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-height: 8
+#| fig-width: 6
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+data_long <- data %>%
+  mutate(across(c(Year, AgeGroup, Sex, Employment), factor)) %>%
+
+  pivot_longer(
+    cols = c(Year, AgeGroup, Sex, Employment),
+    names_to = "Variable",
+    values_to = "Category"
+  )%>%
+  mutate(Variable = factor(Variable, levels = c("AgeGroup", "Sex", "Year", "Employment")))
+  
+  
+ggplot(data_long, aes(x = Category, fill = Obese)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ Variable, scales = "free_x",ncol=2) +
+  theme_minimal() +
+  labs(
+    title = "Obesity Distribution Across Demographic Factors",
+    x = "",
+    y = "Proportion"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+```
+
+The proportion of individuals classified as obese shows slight variation over time, suggesting potential changes in obesity prevalence across survey years. Modest differences are also observed between males and females. In addition, obesity prevalence varies across age groups, and differences across employment categories suggest a potential influence of socio-economic factors.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-height: 4.5
+#| fig-width: 5
+data %>%
+  pivot_longer(cols = c(Veg, Fruit),
+               names_to = "Diet",
+               values_to = "Intake") %>%
+  ggplot(aes(x = Intake, fill = Obese)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ Diet) +
+  theme_minimal() +
+  theme(legend.position = "bottom")+
+  labs(title = "Obesity by Diet Factors",
+       x = "Intake (Yes/No)",
+       y = "Proportion")
+```
+
+Obesity prevalence was also explored across dietary factors, including fruit and vegetable intake. The distributions appear similar, although slight differences may be observed between individuals meeting and not meeting the recommended intake.
+
+The exploratory analysis suggests that obesity prevalence varies across different groups. In particular, differences are observed across age groups, and socio-economic and vegetable intake factors. These patterns indicate that obesity is likely influenced by multiple variables. A formal statistical analysis will be conducted to further investigate these relationships and determine their significance.
+
+## 
