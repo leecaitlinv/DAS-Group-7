@@ -178,13 +178,19 @@ $$
 
 Where
 
--   $p_i$ the probability that individual $i$ is obese.
--   $\beta_0$ is the intercept of the model, corresponding to the baseline group.
--   $\beta_1{\text{AgeGroup}}$ is the differences in log-odds of obesity between each age category and the reference age group.
--   $\beta_2{\text{Sex}}$ is the difference in log-odds of obesity between males and females.
--   $\beta_3{\text{Employment}}$ is the differences in log-odds of obesity between each employment category and the reference employment group.
--   $\beta_4{\text{Veg}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake.
--   $\beta_5{\text{Fruit}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended fruit intake.
+-   $p_i$ the probability that individual $i$ is obese;
+
+-   $\beta_0$ is the intercept of the model, corresponding to the baseline group;
+
+-   $\beta_1{\text{AgeGroup}}$ is the differences in log-odds of obesity between each age category and the reference age group;
+
+-   $\beta_2{\text{Sex}}$ is the difference in log-odds of obesity between males and females;
+
+-    $\beta_3{\text{Employment}}$ is the differences in log-odds of obesity between each employment category and the reference employment group;
+
+-   $\beta_4{\text{Veg}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake;
+
+-    $\beta_5{\text{Fruit}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended fruit intake.
 
 This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
 
