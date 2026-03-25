@@ -1,16 +1,16 @@
 ---
 title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in Scotland: Evidence from the 2008–2012 Health Surveys"
-author: "Caitlin Lee, Yijia Yuan, Qianrui Tang, Yixuan Liu"
+author: "2917216C, 2958694Y, 2963382T, 3136735L"
 format:
   pdf:
     documentclass: article
     fontsize: 11pt
     titlepage: false
 geometry: 
-- left = 0.5in
-- right = 0.5in
-- up = 0.9in 
-- down = 0.9in
+- left=0.5in
+- right=0.5in
+- top=0.9in 
+- bottom=0.9in
 editor: visual
 ---
 
@@ -52,7 +52,6 @@ In this analysis, Obese is treated as the response variable. The remaining varia
 #| message: false
 data<-read.csv("DAProject7.csv")
 data<-read.csv("DAProject7.csv", stringsAsFactors = T)
-str(data)
 library(ggplot2)
 library(tidyverse)
 library(tidymodels)
@@ -97,15 +96,16 @@ To explore whether obesity prevalence has changed over time, the proportion of i
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-height: 8
+#| fig-height: 6
 #| fig-width: 6
+#| fig-align: center
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 
 data_long <- data %>%
   mutate(across(c(Year, AgeGroup, Sex, Employment), factor)) %>%
-
+  mutate(Employment = str_wrap(as.character(Employment), width = 18)) %>%
   pivot_longer(
     cols = c(Year, AgeGroup, Sex, Employment),
     names_to = "Variable",
@@ -116,12 +116,12 @@ data_long <- data %>%
 ggplot(data_long, aes(x = Category, fill = Obese)) +
   geom_bar(position = "fill") +
   facet_wrap(~ Variable, scales = "free_x",ncol=2) +
+  theme_minimal(base_size = 10) +
   labs(
     title = "Obesity Distribution Across Demographic Factors",
     x = NULL,
     y = "Proportion"
   ) +
-  theme_minimal(base_size = 10) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
     legend.position = "bottom", 
@@ -138,6 +138,7 @@ The proportion of individuals classified as obese shows slight variation over ti
 #| message: false
 #| fig-height: 4.5
 #| fig-width: 5
+#| fig-align: center
 data %>%
   pivot_longer(cols = c(Veg, Fruit),
                names_to = "Diet",
@@ -203,6 +204,7 @@ This model allows us to assess whether obesity prevalence varies with age group,
 #| echo: false
 #| warning: false
 #| message: false
+#| results: hide
 
 #q1 model
 #response modeled with respect to year
@@ -221,6 +223,7 @@ The model when fitted produced the result as follows:
 ```{r}
 #| warning: false
 #| message: false
+#| echo: false
 tab_model(model_year)
 ```
 
@@ -230,15 +233,7 @@ From the figure above, there was no evidence of obesity prevalence over time as 
 #| echo: false
 #| warning: false
 #| message: false
-data$Obese <- factor(data$Obese)
-data$AgeGroup <- factor(data$AgeGroup)
-data$Sex <- factor(data$Sex)
-data$Employment <- factor(data$Employment)
-data$Veg <- factor(data$Veg)
-data$Fruit <- factor(data$Fruit)
-```
-
-```{r}
+#| results: hide
 #q2 models
 
 #testing the binomial model with just the additive terms.
@@ -294,6 +289,9 @@ The logistic regression results indicate that age is the strongest predictor of 
 
 ```{r}
 #| eval: false
+#| echo: false
+#| warning: false
+#| message: false
 
 #Model fit with additive model 
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
