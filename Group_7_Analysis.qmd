@@ -1,6 +1,6 @@
 ---
 title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in Scotland: Evidence from the 2008–2012 Health Surveys"
-author: "Caitlin Lee, Yijia Yuan, Qianrui Tang, Yixuan Liu"
+author: "2917216C, 2958694Y, 2963382T, 3136735L"
 format:
   pdf:
     documentclass: article
