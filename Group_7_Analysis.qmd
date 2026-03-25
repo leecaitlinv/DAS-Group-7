@@ -55,8 +55,8 @@ The main questions of interest are:
 #| warning: false
 #| message: false
 data<-read.csv("DAProject7.csv")
-data<-read.csv("DAProject7.csv", stringsAsFactors = T)
 str(data)
+
 library(ggplot2)
 library(tidyverse)
 library(tidymodels)
@@ -71,6 +71,18 @@ library(ggplot2)
 library(broom)
 library(yardstick)
 library(pROC)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+data$Obese <- factor(data$Obese)
+data$AgeGroup <- factor(data$AgeGroup)
+data$Sex <- factor(data$Sex)
+data$Employment <- factor(data$Employment)
+data$Veg <- factor(data$Veg)
+data$Fruit <- factor(data$Fruit)
 ```
 
 ```{r}
@@ -241,18 +253,6 @@ tab_model(model_year)
 ```
 
 From the figure above, there was no evidence of obesity prevalence over time as the 95% CI range included 1. The model explained very little variation in obesity indicating that year alone is not a strong predictor of obesity. The p-value is also much bigger than the significant level indicating that year is not statistically significant for explaining obesity and therefore conclude that obesity prevalence does not differ by year.
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-data$Obese <- factor(data$Obese)
-data$AgeGroup <- factor(data$AgeGroup)
-data$Sex <- factor(data$Sex)
-data$Employment <- factor(data$Employment)
-data$Veg <- factor(data$Veg)
-data$Fruit <- factor(data$Fruit)
-```
 
 ```{r}
 #q2 models
