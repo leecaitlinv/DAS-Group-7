@@ -302,7 +302,7 @@ auc(roc_obj)
 #| tbl-cap: Odds ratios from the logistic regression model for obesity prevalence
 
 sjPlot::tab_model(
-  Question2,
+  modelfull1,
   transform = "exp",
   show.ci = TRUE,
   show.p = TRUE,
