@@ -214,6 +214,7 @@ Where
 This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
 
 ### Model results
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -330,4 +331,3 @@ auc(roc_obj1)
 
 #in terms of the AUC, the final model with interaction terms is better. And thus its also the reason why we choose the final model with the interaction terms
 ```
-
