@@ -231,6 +231,7 @@ This model allows us to assess whether obesity prevalence varies with age group,
 #| echo: false
 #| warning: false
 #| message: false
+#| results: 'hide'
 
 #q1 model
 #response modeled with respect to year
@@ -259,6 +260,7 @@ From the figure above, there was no evidence of obesity prevalence over time as 
 #| echo: false
 #| warning: false
 #| message: false
+#| results: 'hide'
 #q2 models
 
 #testing the binomial model with just the additive terms.
@@ -326,6 +328,7 @@ The logistic regression results indicate that age is the strongest predictor of 
 #| echo: false
 #| warning: false
 #| message: false
+#| results: 'hide'
 
 #Model fit with additive model 
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
