@@ -187,6 +187,22 @@ summary(model_year)
 tab_model(model_year)
 ```
 
+To assess whether the obesity prevalence differ by year, a logistic regression model was fitted with year being the only explanatory variable included. The model takes the form:
+
+$$
+y_i = \alpha + \beta_1Year_i + \epsilon_i,  i = {2009, 2010, 2011, 2012}
+$$
+
+The model when fitted produced the result as follows:
+
+```{r}
+#| warning: false
+#| message: false
+tab_model(model_year)
+```
+
+From the figure above, there was no evidence of obesity prevalence over time as the 95% CI range included 1. The model explained very little variation in obesity indicating that year alone is not a strong predictor of obesity. The p-value is also much bigger than the significant level indicating that year is not statistically significant for explaining obesity and therefore conclude that obesity prevalence does not differ by year.
+
 ```{r}
 #| echo: false
 #| warning: false
