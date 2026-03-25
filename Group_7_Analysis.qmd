@@ -199,8 +199,6 @@ Where
 
 This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
 
-### Model results
-
 ```{r}
 #| echo: false
 #| warning: false
