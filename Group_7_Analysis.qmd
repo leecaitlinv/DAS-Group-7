@@ -1,16 +1,16 @@
 ---
-title: "Analysis of Obesity Prevalence and its Socio-Economic Determinants in Scotland: Evidence from the 2008-2012 Health Surveys"
-author: "2917216C, 2958694Y, 2963382T, 3136735L"
+title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in Scotland: Evidence from the 2008–2012 Health Surveys"
+author: "Caitlin Lee, Yijia Yuan, Qianrui Tang, Yixuan Liu"
 format:
   pdf:
     documentclass: article
     fontsize: 11pt
     titlepage: false
-geometry:
-- left=0.5in
-- right=0.5in
-- top=1in
-- bottom=1in
+geometry: 
+- left = 0.5in
+- right = 0.5in
+- up = 0.9in 
+- down = 0.9in
 editor: visual
 ---
 
@@ -18,11 +18,11 @@ editor: visual
 
 ### Background
 
-Obesity is a growing public health concern worldwide and is associated with an increased risk of various chronic conditions, including cardiovascular diseases, diabetes, and certain cancers. Monitoring the prevalence of obesity within populations is important for identifying trends over time and informing public health policy.
+Obesity is a growing public health concern worldwide and is associated with an increased risk of various chronic conditions, including cardiovascular diseases, diabetes, and certain cancers. Monitoring the prevalence of obesity within a population is important for identifying trends over time and informing public health policies.
 
-The Scottish Health Survey collects information on health and lifestyle of individuals in Scotland. In this analysis, the dataset contains information collected between 2008 and 2012, i demographic, socio-economic, and lifestyle factors alongside an indicator of obesity.
+The Scottish Health Survey is designed to assess the health of individuals living in Scotland and to monitor changes in health-related behaviours and outcomes. The dataset used in this analysis contains information collected between 2008 and 2012, including demographic, socio-economic, and lifestyle factors alongside an indicator of obesity.
 
-The aim of this study is to examine whether the prevalence of obesity in Scotland has changed over the survey years. In addition, the analysis will explore whether obesity prevalence differs across age groups, gender, employment status, and lifestyle behaviours such as fruit and vegetable consumption.
+The primary aim of this study is to examine whether the prevalence of obesity in Scotland has changed over the survey years. In addition, the analysis will explore whether obesity prevalence differs across age groups, gender, employment status, and lifestyle behaviours such as fruit and vegetable consumption.
 
 ### Variables
 
@@ -44,15 +44,23 @@ The dataset contains the following variables:
 
 In this analysis, Obese is treated as the response variable. The remaining variables (age group, sex, employment status, and dietary factors) are considered explanatory variables to investigate potential differences in obesity prevalence across different population subgroups.
 
+### Questions of interest
+
+The main questions of interest are:
+
+-   Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
+
+-   Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
+
 ## Exploratory data Analysis
 
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
-#| 
+data<-read.csv("DAProject7.csv")
 data<-read.csv("DAProject7.csv", stringsAsFactors = T)
-
+str(data)
 library(ggplot2)
 library(tidyverse)
 library(tidymodels)
@@ -97,7 +105,7 @@ To explore whether obesity prevalence has changed over time, the proportion of i
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 6
 library(dplyr)
 library(tidyr)
@@ -132,9 +140,8 @@ ggplot(data_long, aes(x = Category, fill = Obese)) +
 
 The proportion of individuals classified as obese shows slight variation over time, suggesting potential changes in obesity prevalence across survey years. Modest differences are also observed between males and females. In addition, obesity prevalence varies across age groups, and differences across employment categories suggest a potential influence of socio-economic factors.
 
-\newpage
-
 ```{r}
+{r}
 #| echo: false
 #| warning: false
 #| message: false
@@ -205,7 +212,6 @@ This model allows us to assess whether obesity prevalence varies with age group,
 #| echo: false
 #| warning: false
 #| message: false
-#| results: 'hide'
 
 #q1 model
 #response modeled with respect to year
@@ -222,7 +228,6 @@ $$
 The model when fitted produced the result as follows:
 
 ```{r}
-#| echo: false
 #| warning: false
 #| message: false
 tab_model(model_year)
@@ -234,7 +239,15 @@ From the figure above, there was no evidence of obesity prevalence over time as 
 #| echo: false
 #| warning: false
 #| message: false
-#| results: 'hide'
+data$Obese <- factor(data$Obese)
+data$AgeGroup <- factor(data$AgeGroup)
+data$Sex <- factor(data$Sex)
+data$Employment <- factor(data$Employment)
+data$Veg <- factor(data$Veg)
+data$Fruit <- factor(data$Fruit)
+```
+
+```{r}
 #q2 models
 
 #testing the binomial model with just the additive terms.
@@ -260,8 +273,16 @@ modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
 
 #tested the both model (modelred1, modelfull1) to see which one is better
 anova(modelred1, modelfull1, test = "Chisq")
-AIC(modelfull1, modelred1)
+AIC(model_full1, modelred1)
 
+#model fit of full model
+pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
 ```
 
 @tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity. Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
@@ -274,7 +295,7 @@ AIC(modelfull1, modelred1)
 #| tbl-cap: Odds ratios from the logistic regression model for obesity prevalence
 
 sjPlot::tab_model(
-  modelfull1,
+  Question2,
   transform = "exp",
   show.ci = TRUE,
   show.p = TRUE,
@@ -291,21 +312,8 @@ The logistic regression results indicate that age is the strongest predictor of 
 
 ```{r}
 #| eval: false
-#| echo: false
-#| warning: false
-#| message: false
-#| results: 'hide'
 
 #Model fit with additive model 
-#model fit of full model
-pred <- ifelse(predict(modelfull1, type = "response") > 0.5, "Yes", "No")
-
-table(Predicted = pred, Actual = data$Obese)
-
-roc_obj <- roc(data$Obese, predict(modelfull1, type = "response"))
-plot(roc_obj)
-auc(roc_obj)
-
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
 
 table(Predicted = pred1, Actual = data$Obese)
