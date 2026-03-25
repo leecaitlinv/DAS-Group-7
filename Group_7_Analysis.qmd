@@ -184,7 +184,7 @@ modelred <- glm(Obese~ Year + Sex + AgeGroup + Employment + Veg + Fruit, data = 
 summary(modelred)
 
 #did backward elimination using step funciton to get the final model as:
-step(modelred, direction = "backward")
+stats::step(modelred, direction = "backward")
 modelred1 <- glm (Obese ~ Sex + AgeGroup + Employment + Veg, data = data, family = binomial)
 
 #Testing model with a few chosen interaction terms 
@@ -194,7 +194,7 @@ modelfull <-  glm(Obese ~ Year + Sex + AgeGroup + Employment + Veg + Fruit +
 summary(modelfull)
 
 #backward elimintation using step function again
-step(modelfull, direction = "backward")
+stats::step(modelfull, direction = "backward")
 
 # got to the final model for this as:
 modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
