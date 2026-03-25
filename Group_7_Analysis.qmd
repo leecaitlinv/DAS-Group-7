@@ -283,11 +283,11 @@ anova(modelred1, modelfull1, test = "Chisq")
 AIC(modelfull1, modelred1)
 
 #model fit of full model
-pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
+pred <- ifelse(predict(modelfull1, type = "response") > 0.5, "Yes", "No")
 
 table(Predicted = pred, Actual = data$Obese)
 
-roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+roc_obj <- roc(data$Obese, predict(modelfull1, type = "response"))
 plot(roc_obj)
 auc(roc_obj)
 ```
