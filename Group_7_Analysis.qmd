@@ -14,11 +14,11 @@ editor: visual
 
 ### Background
 
-Obesity is a growing public health concern worldwide and is associated with an increased risk of various chronic conditions, including cardiovascular diseases, diabetes, and certain cancers. Monitoring the prevalence of obesity within a population is important for identifying trends over time and informing public health policies.
+Obesity is a growing public health concern worldwide and is associated with an increased risk of various chronic conditions, including cardiovascular diseases, diabetes, and certain cancers. Monitoring the prevalence of obesity within populations is important for identifying trends over time and informing public health policy.
 
-The Scottish Health Survey is designed to assess the health of individuals living in Scotland and to monitor changes in health-related behaviours and outcomes. The dataset used in this analysis contains information collected between 2008 and 2012, including demographic, socio-economic, and lifestyle factors alongside an indicator of obesity.
+The Scottish Health Survey collects information on health and lifestyle of individuals in Scotland. In this analysis, the dataset contains information collected between 2008 and 2012, i demographic, socio-economic, and lifestyle factors alongside an indicator of obesity.
 
-The primary aim of this study is to examine whether the prevalence of obesity in Scotland has changed over the survey years. In addition, the analysis will explore whether obesity prevalence differs across age groups, gender, employment status, and lifestyle behaviours such as fruit and vegetable consumption.
+The aim of this study is to examine whether the prevalence of obesity in Scotland has changed over the survey years. In addition, the analysis will explore whether obesity prevalence differs across age groups, gender, employment status, and lifestyle behaviours such as fruit and vegetable consumption.
 
 ### Variables
 
@@ -39,14 +39,6 @@ The dataset contains the following variables:
 -   **Obese:** Indicator variable showing whether the individual is classified as obese.
 
 In this analysis, Obese is treated as the response variable. The remaining variables (age group, sex, employment status, and dietary factors) are considered explanatory variables to investigate potential differences in obesity prevalence across different population subgroups.
-
-### Questions of interest
-
-The main questions of interest are:
-
--   Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
-
--   Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
 
 ## Exploratory data Analysis
 
