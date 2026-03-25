@@ -44,14 +44,6 @@ The dataset contains the following variables:
 
 In this analysis, Obese is treated as the response variable. The remaining variables (age group, sex, employment status, and dietary factors) are considered explanatory variables to investigate potential differences in obesity prevalence across different population subgroups.
 
-### Questions of interest
-
-The main questions of interest are:
-
--   Has the prevalence of obesity in Scotland changed over the given years of the Scottish Health Survey?
-
--   Are there any differences in obesity by age, gender, socio-economic status or lifestyle factors?
-
 ## Exploratory data Analysis
 
 ```{r}
@@ -141,7 +133,6 @@ ggplot(data_long, aes(x = Category, fill = Obese)) +
 The proportion of individuals classified as obese shows slight variation over time, suggesting potential changes in obesity prevalence across survey years. Modest differences are also observed between males and females. In addition, obesity prevalence varies across age groups, and differences across employment categories suggest a potential influence of socio-economic factors.
 
 ```{r}
-{r}
 #| echo: false
 #| warning: false
 #| message: false
