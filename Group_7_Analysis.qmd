@@ -264,16 +264,7 @@ modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
 
 #tested the both model (modelred1, modelfull1) to see which one is better
 anova(modelred1, modelfull1, test = "Chisq")
-AIC(model_full1, modelred1)
-
-#model fit of full model
-pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
-
-table(Predicted = pred, Actual = data$Obese)
-
-roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
-plot(roc_obj)
-auc(roc_obj)
+AIC(modelfull1, modelred1)
 ```
 
 @tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity. Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
@@ -286,7 +277,7 @@ auc(roc_obj)
 #| tbl-cap: Odds ratios from the logistic regression model for obesity prevalence
 
 sjPlot::tab_model(
-  Question2,
+  modelred1,
   transform = "exp",
   show.ci = TRUE,
   show.p = TRUE,
@@ -313,5 +304,13 @@ roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
 plot(roc_obj1)
 auc(roc_obj1)
 
+#model fit of full model
+pred <- ifelse(predict(modelfull1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
 #in terms of the AUC, the final model with interaction terms is better. And thus its also the reason why we choose the final model with the interaction terms
 ```
