@@ -149,7 +149,6 @@ ggplot(data_long, aes(x = Category, fill = Obese)) +
 The proportion of individuals classified as obese shows slight variation over time, suggesting potential changes in obesity prevalence across survey years. Modest differences are also observed between males and females. In addition, obesity prevalence varies across age groups, and differences across employment categories suggest a potential influence of socio-economic factors.
 
 ```{r}
-{r}
 #| echo: false
 #| warning: false
 #| message: false
