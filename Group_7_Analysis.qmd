@@ -2,6 +2,8 @@
 title: "Group 7 Data Analysis"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Introduction
@@ -49,6 +51,8 @@ The main questions of interest are:
 #| warning: false
 #| message: false
 data<-read.csv("DAProject7.csv")
+data<-read.csv("DAProject7.csv", stringsAsFactors = T)
+str(data)
 library(ggplot2)
 library(tidyverse)
 library(tidymodels)
@@ -59,6 +63,10 @@ library(moderndive)
 library(sjPlot)
 library(performance)
 library(kableExtra)
+library(ggplot2)
+library(broom)
+library(yardstick)
+library(pROC)
 ```
 
 ```{r}
@@ -206,25 +214,81 @@ Where
 This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
 
 ### Model results
-
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
 
+#q1 model
+#response modeled with respect to year
+model_year <- glm(Obese~Year, data = data, family = binomial)
+summary(model_year)
+```
+
+To assess whether the obesity prevalence differ by year, a logistic regression model was fitted with year being the only explanatory variable included. The model takes the form:
+
+$$
+y_i = \alpha + \beta_1Year_i + \epsilon_i,  i = {2009, 2010, 2011, 2012}
+$$
+
+The model when fitted produced the result as follows:
+
+```{r}
+#| warning: false
+#| message: false
+tab_model(model_year)
+```
+
+From the figure above, there was no evidence of obesity prevalence over time as the 95% CI range included 1. The model explained very little variation in obesity indicating that year alone is not a strong predictor of obesity. The p-value is also much bigger than the significant level indicating that year is not statistically significant for explaining obesity and therefore conclude that obesity prevalence does not differ by year.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
 data$Obese <- factor(data$Obese)
 data$AgeGroup <- factor(data$AgeGroup)
 data$Sex <- factor(data$Sex)
 data$Employment <- factor(data$Employment)
 data$Veg <- factor(data$Veg)
 data$Fruit <- factor(data$Fruit)
+```
 
-Question2 <- glm(
-  Obese ~ AgeGroup + Sex + Employment + Veg + Fruit,
-  data = data,
-  family = binomial)
+```{r}
+#q2 models
 
-summary(Question2)
+#testing the binomial model with just the additive terms.
+modelred <- glm(Obese~ Year + Sex + AgeGroup + Employment + Veg + Fruit, data = data, family = binomial)
+summary(modelred)
+
+#did backward elimination using step function to get the final model as:
+step(modelred, direction = "backward")
+modelred1 <- glm (Obese ~ Sex + AgeGroup + Employment + Veg, data = data, family = binomial)
+
+#Testing model with a few chosen interaction terms 
+modelfull <-  glm(Obese ~ Year + Sex + AgeGroup + Employment + Veg + Fruit +
+            Year:Sex + Year:AgeGroup + Sex:AgeGroup,
+          data = data, family = binomial)
+summary(modelfull)
+
+#backward elimintation using step function again
+step(modelfull, direction = "backward")
+
+# got to the final model for this as:
+modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
+                    data = data, family = binomial)
+
+#tested the both model (modelred1, modelfull1) to see which one is better
+anova(modelred1, modelfull1, test = "Chisq")
+AIC(model_full1, modelred1)
+
+#model fit of full model
+pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(model_full1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
 ```
 
 @tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity. Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
@@ -250,6 +314,20 @@ For male,full-time education employment,paid ememployment, self-employedor on go
 
 Obviously, 'Age Group' is statistically significant predictor. In opposite,there is no significant difference between males and females. Furthermore,being a full-time education and consuming vegetables is associated with a lower risk of obesity. The other employment and fruit consumption are not clearly indicates obesity.
 
-### Analysis result
-
 The logistic regression results indicate that age is the strongest predictor of obesity, with the risk increasing significantly across age groups. Lifestyle factors also play a role, as individuals who consume recommended amounts of vegetables are less likely to be obese. In contrast, sex and most employment categories are not significantly associated with obesity. That is all the related results we found by this project.
+
+```{r}
+#| eval: false
+
+#Model fit with additive model 
+pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred1, Actual = data$Obese)
+
+roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
+plot(roc_obj1)
+auc(roc_obj1)
+
+#in terms of the AUC, the final model with interaction terms is better. And thus its also the reason why we choose the final model with the interaction terms
+```
+
