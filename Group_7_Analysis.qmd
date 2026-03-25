@@ -54,8 +54,8 @@ The main questions of interest are:
 #| echo: false
 #| warning: false
 #| message: false
-data<-read.csv("DAProject7.csv")
-str(data)
+#| 
+data<-read.csv("DAProject7.csv", stringsAsFactors = T)
 
 library(ggplot2)
 library(tidyverse)
@@ -71,18 +71,6 @@ library(ggplot2)
 library(broom)
 library(yardstick)
 library(pROC)
-```
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-data$Obese <- factor(data$Obese)
-data$AgeGroup <- factor(data$AgeGroup)
-data$Sex <- factor(data$Sex)
-data$Employment <- factor(data$Employment)
-data$Veg <- factor(data$Veg)
-data$Fruit <- factor(data$Fruit)
 ```
 
 ```{r}
@@ -288,14 +276,6 @@ modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
 anova(modelred1, modelfull1, test = "Chisq")
 AIC(modelfull1, modelred1)
 
-#model fit of full model
-pred <- ifelse(predict(modelfull1, type = "response") > 0.5, "Yes", "No")
-
-table(Predicted = pred, Actual = data$Obese)
-
-roc_obj <- roc(data$Obese, predict(modelfull1, type = "response"))
-plot(roc_obj)
-auc(roc_obj)
 ```
 
 @tbl-summary organize the model results into an odds ratio table which proved the obesity prevalence, we consult the significance of obesity. Extremely low p-value that \<0.001 represents that all age group, full-time education and vegan,means these make a significant effect on obesity. The rest of predictors are not very significant.
@@ -331,6 +311,15 @@ The logistic regression results indicate that age is the strongest predictor of 
 #| results: 'hide'
 
 #Model fit with additive model 
+#model fit of full model
+pred <- ifelse(predict(modelfull1, type = "response") > 0.5, "Yes", "No")
+
+table(Predicted = pred, Actual = data$Obese)
+
+roc_obj <- roc(data$Obese, predict(modelfull1, type = "response"))
+plot(roc_obj)
+auc(roc_obj)
+
 pred1 <- ifelse(predict(modelred1, type = "response") > 0.5, "Yes", "No")
 
 table(Predicted = pred1, Actual = data$Obese)
