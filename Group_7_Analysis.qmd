@@ -280,7 +280,7 @@ modelfull1 <-  glm(Obese ~ Sex + AgeGroup + Employment + Veg + Sex:AgeGroup,
 
 #tested the both model (modelred1, modelfull1) to see which one is better
 anova(modelred1, modelfull1, test = "Chisq")
-AIC(model_full1, modelred1)
+AIC(modelfull1, modelred1)
 
 #model fit of full model
 pred <- ifelse(predict(model_full1, type = "response") > 0.5, "Yes", "No")
