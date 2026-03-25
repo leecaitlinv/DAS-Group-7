@@ -72,6 +72,8 @@ library(pROC)
 #| echo: false
 #| warning: false
 #| message: false
+#| label: tbl-proportions 
+#| tbl-cap: Summary of Obesity Status in dataset
 library(dplyr)
 library(scales)
 library(knitr)
@@ -99,6 +101,8 @@ To explore whether obesity prevalence has changed over time, the proportion of i
 #| fig-height: 6
 #| fig-width: 6
 #| fig-align: center
+#| label: fig-obesity-dist
+#| fig-cap: "Obesity Distribution across Demographic Factors"
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -124,7 +128,7 @@ ggplot(data_long, aes(x = Category, fill = Obese)) +
   ) +
   theme(
     axis.text.x = element_text(angle = 35, hjust = 1, size = 7),
-    legend.position = "bottom", 
+    legend.position = "right", 
     strip.text = element_text(face = "bold"),
     plot.title = element_text(hjust = 0.5, face = "bold")
   )
@@ -136,9 +140,11 @@ The proportion of individuals classified as obese shows slight variation over ti
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-height: 4.5
+#| fig-height: 3
 #| fig-width: 5
 #| fig-align: center
+#| label: fig-obesity-diet
+#| fig-cap: "Obesity by Diet Factors"
 data %>%
   pivot_longer(cols = c(Veg, Fruit),
                names_to = "Diet",
@@ -147,10 +153,11 @@ data %>%
   geom_bar(position = "fill") +
   facet_wrap(~ Diet) +
   theme_minimal() +
-  theme(legend.position = "bottom")+
+  theme(legend.position = "right")+
   labs(title = "Obesity by Diet Factors",
-       x = "Intake (Yes/No)",
-       y = "Proportion")
+       x = "Obese Indication (Yes/No)",
+       y = "Proportion") + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
 
 Obesity prevalence was also explored across dietary factors, including fruit and vegetable intake. The distributions appear similar, although slight differences may be observed between individuals meeting and not meeting the recommended intake.
@@ -172,8 +179,8 @@ The logistic regression model is written as
 $$
 \log\left(\frac{p_i}{1-p_i}\right)
 =
-\beta_0 + \beta_1 \text{AgeGroup} + \beta_2 \text{Sex} + \beta_3 \text{Employment}
-+ \beta_4 \text{Veg} + \beta_5 \text{Fruit}.
+\beta_0 + \beta_1 \text{Sex}_i + \pmb{\beta}_2 \text{AgeGroup}_i + \pmb{\beta_3} \text{Employment}_i
++ \beta_4 \text{Veg}_i.
 $$
 
 Where
@@ -182,15 +189,13 @@ Where
 
 -   $\beta_0$ is the intercept of the model, corresponding to the baseline group;
 
--   $\beta_1{\text{AgeGroup}}$ is the differences in log-odds of obesity between each age category and the reference age group;
+-   $\beta_1{\text{Sex}}_i$ is the difference in log-odds of obesity between males and female;
 
--   $\beta_2{\text{Sex}}$ is the difference in log-odds of obesity between males and females;
+-   $\pmb\beta_2{\text{AgeGroup}_i}$ is the differences in log-odds of obesity between each age category and the reference age group;
 
--    $\beta_3{\text{Employment}}$ is the differences in log-odds of obesity between each employment category and the reference employment group;
+-   $\pmb\beta_3{\text{Employment}}_i$ is the differences in log-odds of obesity between each employment category and the reference employment group;
 
--   $\beta_4{\text{Veg}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake;
-
--    $\beta_5{\text{Fruit}}$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended fruit intake.
+-   $\beta_4{\text{Veg}}_i$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake.
 
 This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
 
@@ -201,7 +206,6 @@ This model allows us to assess whether obesity prevalence varies with age group,
 #| warning: false
 #| message: false
 #| results: hide
-
 #q1 model
 #response modeled with respect to year
 model_year <- glm(Obese~Year, data = data, family = binomial)
@@ -221,6 +225,8 @@ The model when fitted produced the result as follows:
 #| warning: false
 #| message: false
 #| echo: false
+#| label: tbl-model-year
+#| tbl-cap: "Odds ratios from logistic regression model of obesity prevalence by year"
 tab_model(model_year)
 ```
 
