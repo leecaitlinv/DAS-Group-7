@@ -93,20 +93,6 @@ data %>%
   )
 ```
 
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| fig-height: 4
-#| fig-width: 4.5
-#| figure: center
-ggplot(data, aes(x = Obese)) +
-  geom_bar(fill = "skyblue") +
-  theme_minimal() +
-  labs(title = "Overall Obesity Prevalence",
-       x = "Obese", y = "Count")
-```
-
 As the table and the figure shows. The proportion of individuals classified as obese provides an initial indication of obesity prevalence in the sample.
 
 To explore whether obesity prevalence has changed over time, the proportion of individuals classified as obese was examined across different survey years.
