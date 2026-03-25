@@ -1,12 +1,16 @@
 ---
-title: "An Analysis of Obesity Prevalence and Its Socio-Economic Determinants in Scotland: Evidence from the 2008–2012 Health Surveys"
+title: "Analysis of Obesity Prevalence and its Socio-Economic Determinants in Scotland: Evidence from the 2008-2012 Health Surveys"
 author: "2917216C, 2958694Y, 2963382T, 3136735L"
 format:
   pdf:
     documentclass: article
     fontsize: 11pt
     titlepage: false
-geometry: margin=0.9in
+geometry:
+- left=0.5in
+- right=0.5in
+- top=1in
+- bottom=1in
 editor: visual
 ---
 
@@ -93,7 +97,7 @@ To explore whether obesity prevalence has changed over time, the proportion of i
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-height: 8
+#| fig-height: 6
 #| fig-width: 6
 library(dplyr)
 library(tidyr)
@@ -125,6 +129,8 @@ ggplot(data_long, aes(x = Category, fill = Obese)) +
 ```
 
 The proportion of individuals classified as obese shows slight variation over time, suggesting potential changes in obesity prevalence across survey years. Modest differences are also observed between males and females. In addition, obesity prevalence varies across age groups, and differences across employment categories suggest a potential influence of socio-economic factors.
+
+\newpage
 
 ```{r}
 #| echo: false
