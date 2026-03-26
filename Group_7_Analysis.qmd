@@ -323,3 +323,19 @@ text(0.0, 0.6, paste("AUC =", round(auc(roc_obj1), 2)))
 ```
 
 ## Conclusion
+
+This study examined obesity prevalence in Scotland using both exploratory analysis and logistic regression. The results suggest that obesity is influenced by multiple factors, with age identified as the most significant predictor, showing an increasing risk across older age groups. Dietary behaviour also plays a role, as individuals who meet recommended vegetable intake levels are less likely to be obese.
+
+In contrast, variables such as sex, employment status, and year were not found to have statistically significant effects on obesity prevalence. While the model helps identify some meaningful associations, its overall predictive performance is relatively weak (AUC = 0.59), indicating limited ability to accurately classify individuals.
+
+This suggests that important determinants of obesity—such as physical activity, genetic factors, and other lifestyle influences—may not be captured in the dataset. Therefore, although the analysis provides useful insights, obesity remains a complex issue that requires further investigation with more comprehensive data and improved modelling approaches.
+
+## Limitations
+
+-   **Omitted variables**: Key factors such as physical activity and genetic predisposition were not included, which may introduce bias.
+
+-   **Limited predictive performance**: The model achieved a low AUC (0.59), indicating weak discriminatory ability.
+
+-   **Cross-sectional design**: The data do not allow for causal inference, only associations can be identified.
+
+-   **Self-reported bias**: Variables such as dietary intake may be subject to reporting inaccuracies.
