@@ -350,4 +350,4 @@ This suggests that important determinants of obesity—such as physical activity
 -    **Cross-sectional design**: The data do not allow for causal inference, only associations can be identified.
 
 -    **Self-reported bias**: Variables such as dietary intake may be subject to reporting inaccuracies.
->>>>>>> 2c36254b829f1457eee641edfec45aed92d65bad
+
