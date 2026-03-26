@@ -330,6 +330,7 @@ In contrast, variables such as sex, employment status, and year were not found t
 
 This suggests that important determinants of obesity—such as physical activity, genetic factors, and other lifestyle influences—may not be captured in the dataset. Therefore, although the analysis provides useful insights, obesity remains a complex issue that requires further investigation with more comprehensive data and improved modelling approaches.
 
+<<<<<<< HEAD
 ## Limitations
 
 -   **Omitted variables**: Key factors such as physical activity and genetic predisposition were not included, which may introduce bias.
@@ -339,3 +340,14 @@ This suggests that important determinants of obesity—such as physical activity
 -   **Cross-sectional design**: The data do not allow for causal inference, only associations can be identified.
 
 -   **Self-reported bias**: Variables such as dietary intake may be subject to reporting inaccuracies.
+=======
+## Limitations 
+
+-    **Omitted variables**: Key factors such as physical activity and genetic predisposition were not included, which may introduce bias.
+
+-    **Limited predictive performance**: The model achieved a low AUC (0.59), indicating weak discriminatory ability.
+
+-    **Cross-sectional design**: The data do not allow for causal inference, only associations can be identified.
+
+-    **Self-reported bias**: Variables such as dietary intake may be subject to reporting inaccuracies.
+>>>>>>> 2c36254b829f1457eee641edfec45aed92d65bad
