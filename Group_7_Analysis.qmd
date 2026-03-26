@@ -327,5 +327,7 @@ auc_table <- data.frame(
 kable(auc_table, align = "c")
 #in terms of the AUC, the additive model
 ```
-Next, we evaluate the model to see how good it fits our data. We evaluated by using the ROC curves and find the AUC data
 
+The performance of the final logistic regression model was assessed using the area under the ROC curve (AUC) in @tbl-auc. The model achieved an AUC of 0.59, suggesting that it performs slightly better than random guessing. This suggest that the model has a limited ability in distinguishing individuals who are obese and not obese. This is also reflected in @fig-roc which shows that the curve remains relatively close to the line of no discrimination.  
+
+The relatively low AUC indicates that the explanatory variables included in the model do not sufficiently capture the factors associated with obesity prevalence. This may suggest that important predictors are missing from the dataset, such as genetics, physical activities,  etc. Therefore, while the model identify some associations, its overall predictive performance is weak and should be interpreted with caution. 
