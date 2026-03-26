@@ -87,12 +87,13 @@ data %>%
   kable(
     col.names = c("Obesity Status", "Count", "Proportion", "Percentage"),
     align = "c"
-  )
+  ) %>%
+    kable_styling(font_size = 8)
 ```
 
-As the table and the figure shows. The proportion of individuals classified as obese provides an initial indication of obesity prevalence in the sample.
+An explanatory data analysis was conducted to provide an initial overview of the obesity prevalence and its distribution within the dataset. @tbl-proportions summarises the proportion of obesity status, showing that roughly 29.6% are classified as obese, while 70.4% are not. This indicates that obesity affects a substantial proportion of the population
 
-To explore whether obesity prevalence has changed over time, the proportion of individuals classified as obese was examined across different survey years.
+To explore patterns in obesity prevalence, the proportion of individuals classified as obese was examined across demographic and lifestyle factors.
 
 ```{r}
 #| echo: false
@@ -103,6 +104,7 @@ To explore whether obesity prevalence has changed over time, the proportion of i
 #| fig-align: center
 #| label: fig-obesity-dist
 #| fig-cap: "Obesity Distribution across Demographic Factors"
+#| fig-pos: H
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -145,6 +147,7 @@ The proportion of individuals classified as obese shows slight variation over ti
 #| fig-align: center
 #| label: fig-obesity-diet
 #| fig-cap: "Obesity by Diet Factors"
+#| fig-pos: H
 data %>%
   pivot_longer(cols = c(Veg, Fruit),
                names_to = "Diet",
@@ -168,37 +171,13 @@ The exploratory analysis suggests that obesity prevalence varies across differen
 
 ### Logistic regression model
 
-To investigate whether obesity prevalence in the Scottish population varies with factors such as age, sex, socioeconomic status, and lifestyle, we fitted a binary logistic regression model. Since the response variable "obesity" is a binary variable, logistic regression is suitable for simulating the probability of an individual being classified as obese. Let $Y_i = 1$ if individual $i$ is obese and $Y_i = 0$ otherwise. Then rewrite $Y_i$ as a binary logistic regression model
+To investigate whether obesity prevalence in the Scottish population varies with factors such as year, demographic and lifestyle, we consider the nature of the response. Obesity status is classified as a binary reponse where if individual is obese $Y_i = 1$ and $Y_i = 0$ otherwise.
+
+Given this binary structure, a logistic regression model is suitable for simulating the probability of an individual being classified as obese. Specifically we assume that,
 
 $$
-Y_i \sim \text{Bernoulli}(p_i)
+Y_i \sim \text{Bernoulli}(p_i).
 $$
-
-The logistic regression model is written as
-
-$$
-\log\left(\frac{p_i}{1-p_i}\right)
-=
-\beta_0 + \beta_1 \text{Sex}_i + \pmb{\beta}_2 \text{AgeGroup}_i + \pmb{\beta_3} \text{Employment}_i
-+ \beta_4 \text{Veg}_i.
-$$
-
-Where
-
--   $p_i$ the probability that individual $i$ is obese;
-
--   $\beta_0$ is the intercept of the model, corresponding to the baseline group;
-
--   $\beta_1{\text{Sex}}_i$ is the difference in log-odds of obesity between males and female;
-
--   $\pmb\beta_2{\text{AgeGroup}_i}$ is the differences in log-odds of obesity between each age category and the reference age group;
-
--   $\pmb\beta_3{\text{Employment}}_i$ is the differences in log-odds of obesity between each employment category and the reference employment group;
-
--   $\beta_4{\text{Veg}}_i$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake.
-
-This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -229,6 +208,33 @@ tab_model(model_year)
 ```
 
 From the figure above, there was no evidence of obesity prevalence over time as the 95% CI range included 1. The model explained very little variation in obesity indicating that year alone is not a strong predictor of obesity. The p-value is also much bigger than the significant level indicating that year is not statistically significant for explaining obesity and therefore conclude that obesity prevalence does not differ by year.
+
+The logistic regression model is written as
+
+$$
+\log\left(\frac{p_i}{1-p_i}\right)
+=
+\beta_0 + \beta_1 \text{Sex}_i + \pmb{\beta}_2 \text{AgeGroup}_i + \pmb{\beta_3} \text{Employment}_i
++ \beta_4 \text{Veg}_i.
+$$
+
+Where
+
+-   $p_i$ the probability that individual $i$ is obese;
+
+-   $\beta_0$ is the intercept of the model, corresponding to the baseline group;
+
+-   $\beta_1{\text{Sex}}_i$ is the difference in log-odds of obesity between males and female;
+
+-   $\pmb\beta_2{\text{AgeGroup}_i}$ is the differences in log-odds of obesity between each age category and the reference age group;
+
+-   $\pmb\beta_3{\text{Employment}}_i$ is the differences in log-odds of obesity between each employment category and the reference employment group;
+
+-   $\beta_4{\text{Veg}}_i$ is the difference in log-odds of obesity between individuals who do and do not meet the recommended vegetable intake.
+
+This model allows us to assess whether obesity prevalence varies with age group, sex, employment status, and dietary factors after adjusting for other explanatory variables.
+
+
 
 ```{r}
 #| echo: false
@@ -272,17 +278,19 @@ AIC(modelfull1, modelred1)
 #| label: tbl-summary
 #| tbl-cap: Odds ratios from the logistic regression model for obesity prevalence
 
+cat("\\resizebox{0.85\\textwidth}{!}{")
 sjPlot::tab_model(
   modelred1,
   transform = "exp",
-  show.ci = TRUE,
+  show.ci = F,
   show.p = TRUE,
   show.stat = TRUE,
   dv.labels = "Obesity (Yes vs No)"
 )
+cat("}")
 ```
 
-For male,full-time education employment,paid ememployment, self-employedor on gov't training,employment that works home,vegetable and fruit consumer, they usually have lower odds ratios ,in a high obesity oddswhich means they are less likely to be overweight.The others are higher that more likely to be obese.
+For male, full-time education employment, paid employment, self-employment on gov't training, employment that works home, vegetable and fruit consumer, they usually have lower odds ratios , in a high obesity odds which means they are less likely to be overweight. The others are higher that more likely to be obese.
 
 Obviously, 'Age Group' is statistically significant predictor. In opposite,there is no significant difference between males and females. Furthermore,being a full-time education and consuming vegetables is associated with a lower risk of obesity. The other employment and fruit consumption are not clearly indicates obesity.
 
@@ -328,6 +336,8 @@ kable(auc_table, align = "c")
 #in terms of the AUC, the additive model
 ```
 
-The performance of the final logistic regression model was assessed using the area under the ROC curve (AUC) in @tbl-auc. The model achieved an AUC of 0.59, suggesting that it performs slightly better than random guessing. This suggest that the model has a limited ability in distinguishing individuals who are obese and not obese. This is also reflected in @fig-roc which shows that the curve remains relatively close to the line of no discrimination.  
+The performance of the final logistic regression model was assessed using the area under the ROC curve (AUC) in @tbl-auc. The model achieved an AUC of 0.59, suggesting that it performs slightly better than random guessing. This suggest that the model has a limited ability in distinguishing individuals who are obese and not obese. This is also reflected in @fig-roc which shows that the curve remains relatively close to the line of no discrimination.
 
-The relatively low AUC indicates that the explanatory variables included in the model do not sufficiently capture the factors associated with obesity prevalence. This may suggest that important predictors are missing from the dataset, such as genetics, physical activities,  etc. Therefore, while the model identify some associations, its overall predictive performance is weak and should be interpreted with caution. 
+The relatively low AUC indicates that the explanatory variables included in the model do not sufficiently capture the factors associated with obesity prevalence. This may suggest that important predictors are missing from the dataset, such as genetics, physical activities, etc. Therefore, while the model identify some associations, its overall predictive performance is weak and should be interpreted with caution.
+
+## Conclusion
