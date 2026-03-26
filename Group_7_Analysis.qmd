@@ -314,6 +314,7 @@ table(Predicted = pred1, Actual = data$Obese)
 #| label: fig-roc-auc
 #| fig-cap: ROC curve and corresposding AUC of the logitsitc regression model
 #| fig-align: center
+#| fig-height: 3 
 library(grid)
 roc_obj1 <- roc(data$Obese, predict(modelred1, type = "response"))
 plot(roc_obj1)
